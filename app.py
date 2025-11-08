@@ -1,46 +1,48 @@
 import streamlit as st
 import sqlite3
 import pandas as pd
-import time
 import os
 
 DB_NAME = "log.db"
 
-st.set_page_config(page_title="Networking & Protocols Dashboard", layout="wide")
+st.set_page_config(page_title="Advanced Dashboard", layout="wide")
 
-# Sidebar navigation
-st.sidebar.title("📂 Navigation")
-page = st.sidebar.radio("Select Page", ["Dashboard", "Settings", "About"])
+# TODO: Initialize session state for login status
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
 
-# TODO: Check if database exists
-if not os.path.exists(DB_NAME):
-    st.warning("Database not found. Please make sure 'log.db' from Week 7–8 exists.")
+# TODO: Create login form (username/password)
+if not st.session_state.logged_in:
+    st.title("🔐 Login to Access Dashboard")
+
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
+
+    # TODO: Replace with simple check (e.g., admin / admin123)
+    if st.button("Login"):
+        pass
 else:
-    conn = sqlite3.connect(DB_NAME)
-    df = pd.read_sql_query("SELECT * FROM system_log", conn)
+    # Navigation
+    st.sidebar.title("📂 Navigation")
+    page = st.sidebar.radio("Select Page", ["Dashboard", "Configuration", "Logout"])
 
     if page == "Dashboard":
-        st.title("🌐 Interactive Data Center Dashboard")
+        st.title("🌐 Secure Data Center Dashboard")
+        if not os.path.exists(DB_NAME):
+            st.warning("Database not found. Please ensure 'log.db' exists.")
+        else:
+            conn = sqlite3.connect(DB_NAME)
+            df = pd.read_sql_query("SELECT * FROM system_log", conn)
+            st.dataframe(df.tail(10), use_container_width=True)
+            st.line_chart(df.set_index("timestamp")[["cpu", "memory", "disk"]])
+            conn.close()
 
-        # TODO: Add auto-refresh or manual refresh
-        # Hint: use st.button("Refresh") or st.experimental_rerun()
+    elif page == "Configuration":
+        st.title("⚙️ Configuration Panel")
+        # TODO: Add sliders to adjust thresholds dynamically
+        # Example: CPU_THRESHOLD = st.slider("CPU Alert Threshold (%)", 0, 100, 80)
+        pass
 
-        # TODO: Add sidebar filters (Ping Status, CPU Threshold)
-        # Example: selectbox + slider
-
-        # TODO: Apply filters to dataframe
-        st.subheader("Filtered Records")
-        st.dataframe(df, use_container_width=True)
-
-        # TODO: Add line charts for CPU, Memory, Disk
-        st.subheader("📈 Resource Usage Over Time")
-        st.line_chart(df.set_index("timestamp")[["cpu", "memory", "disk"]])
-
-    elif page == "Settings":
-        st.title("⚙️ Settings Page")
-        st.write("You can add custom configuration or thresholds here.")
-    else:
-        st.title("ℹ️ About")
-        st.write("This dashboard was developed in Week 10 (Networking & Protocols).")
-
-    conn.close()
+    elif page == "Logout":
+        # TODO: Log out and reset session
+        pass
