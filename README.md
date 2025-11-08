@@ -1,44 +1,33 @@
-# Week 10 – Networking & Protocols: Interactive Dashboard
+# Week 11 – Advanced Configuration & Access Control
 
 ## Objective
 
-This week, you will enhance your Streamlit dashboard with **interactive controls** and use **real data**
-from your monitoring system (`log.db` generated in Week 7–8).
-
----
-
-## Data Source
-
-Your dashboard uses the **same database** you created in:
-- Week 7 (SQLite Logging)
-- Week 8 (Alert System Updates)
-
-If your `log.db` file is missing or empty, please re-run your Week 8 `main.py`
-to generate log entries before running this assignment.
+This week, you’ll implement **basic authentication** and **configuration management**
+to make your monitoring dashboard behave like a real system administration tool.
 
 ---
 
 ## Tasks
 
-1. Add a **sidebar navigation menu**:
-   - Dashboard
-   - Settings
-   - About
-2. Implement **auto-refresh** or **manual refresh** button.
-3. Add **filter controls**:
-   - Ping_Status (All / UP / DOWN)
-   - CPU Threshold slider
-4. Display filtered data and charts for CPU, Memory, Disk.
-5. Include a short description on the Settings and About pages.
+1. Implement a simple login form using Streamlit
+   - Username: `admin`
+   - Password: `admin123`
+2. Store login state using `st.session_state`
+3. Add a **Configuration Panel** with sliders to adjust thresholds:
+   - CPU Threshold
+   - Memory Threshold
+   - Disk Threshold
+4. Add a **Logout** option that resets the session
+5. Keep the Dashboard page displaying data from `log.db`
 
 ---
 
 ## Example Output
 
-- Sidebar with navigation
-- Filtered data table
-- Dynamic line charts
-- Refresh button or timer
+- Login page with username/password form  
+- Dashboard showing last 10 entries and charts  
+- Configuration panel with adjustable sliders  
+- Logout resets the interface  
 
 ---
 
@@ -48,23 +37,21 @@ to generate log entries before running this assignment.
 streamlit run app.py
 ```
 
-Make sure log.db is in the same directory.
-
 ## Submission Checklist
 
- app.py includes sidebar, filters, and refresh
+ Login and Logout functions implemented
 
- Charts render correctly
+ Threshold sliders visible under Configuration
 
- Screenshot of dashboard with filters
+ Dashboard connected to log.db
 
- Code pushed to GitHub
- ---
+ Screenshot showing all three pages (Login, Dashboard, Configuration)
+---
 
 ## Bonus (Optional)
 
-Add a date filter using st.date_input
+Store user credentials in a database instead of hardcoding
 
-Display alert count (how many records exceeded thresholds)
+Apply new thresholds to filter alert data dynamically
 
-Add Dark Mode toggle in the Settings page
+Add role-based access (admin vs user)
